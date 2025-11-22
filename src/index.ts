@@ -310,8 +310,8 @@ app.get('/api/repos/:owner/:repo/status', async (req: Request, res: Response) =>
       recentCommits: commits.map(c => ({
         sha: c.sha.substring(0, 7),
         message: c.commit.message,
-        author: c.commit.author.name,
-        date: c.commit.author.date
+        author: c.commit.author?.name || 'Unknown',
+        date: c.commit.author?.date || new Date().toISOString()
       }))
     });
   } catch (error) {
@@ -469,9 +469,11 @@ app.get('/api/rate-limit', async (req: Request, res: Response) => {
           reset: new Date(rateLimit.resources.core.reset * 1000).toISOString()
         },
         graphql: {
-          limit: rateLimit.resources.graphql.limit,
-          remaining: rateLimit.resources.graphql.remaining,
-          reset: new Date(rateLimit.resources.graphql.reset * 1000).toISOString()
+          limit: rateLimit.resources.graphql?.limit || 0,
+          remaining: rateLimit.resources.graphql?.remaining || 0,
+          reset: rateLimit.resources.graphql?.reset 
+            ? new Date(rateLimit.resources.graphql.reset * 1000).toISOString()
+            : new Date().toISOString()
         }
       }
     });
