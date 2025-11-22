@@ -506,7 +506,7 @@ app.use((req: Request, res: Response) => {
 });
 
 // Start server
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
   logger.info(`GitHub MCP Server running on port ${PORT}`);
   logger.info('GitHub org:', process.env.GITHUB_ORG || 'Personal account');
   logger.info('Endpoints: /health, /api/repos/*, /api/rate-limit');
